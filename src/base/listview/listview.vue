@@ -1,44 +1,54 @@
 <template>
-  <scroll :data="data" class="listview" ref="listview">
+<scroll :data="data" class="listview" :listenScroll="listenScroll" ref="listview" @scroll="scroll">
+  <ul>
+    <li v-for="group in data" class="list-group" ref="listGroup">
+      <h2 class="list-group-title">{{group.title}}</h2>
+      <uL>
+        <li v-for="item in group.items" class="list-group-item">
+          <img class="avatar" v-lazy="item.avatar">
+          <span class="name">{{item.name}}</span>
+        </li>
+      </uL>
+    </li>
+  </ul>
+  <div class="list-shortcut" @touchstart.stop.prevent="onShortCutTouchStart" @touchmove.stop.prevent="onShortCutTouchMove">
     <ul>
-      <li v-for="group in data" class="list-group" ref="listGroup">
-        <h2 class="list-group-title">{{group.title}}</h2>
-        <uL>
-          <li  v-for="item in group.items" class="list-group-item">
-            <img class="avatar" v-lazy="item.avatar">
-            <span class="name">{{item.name}}</span>
-          </li>
-        </uL>
+      <li v-for="(item,index) in shortcutList" class="item" :data-index="index">
+        {{item}}
       </li>
     </ul>
-    <div class="list-shortcut" @touchstart.stop.prevent="onShortCutTouchStart" @touchmove.stop.prevent="onShortCutTouchMove">
-      <ul>
-        <li v-for="(item,index) in shortcutList" class="item" :data-index="index">
-          {{item}}
-        </li>
-      </ul>
-    </div>
-  </scroll>
+  </div>
+</scroll>
 </template>
 
 <script type="text/ecmascript-6">
 import Scroll from 'base/scroll/scroll'
-import {getData} from 'common/js/dom'
+import {
+  getData
+} from 'common/js/dom'
 let ANCHOR_HEIGHT = 18
 export default {
-  created(){
+  created() {
     this.touch = {}
+    this.listenScroll = true
+    this.listHeight = []
+  },
+  data() {
+    return {
+      scrollY: -1,
+      currentIndex: 0
+    }
   },
   props: {
-    data:{
+    data: {
       type: Array,
-      default:[]
+      default: []
     }
   },
   computed: {
     shortcutList() {
       return this.data.map((group) => {
-        return group.title.substr(0,1)
+        return group.title.substr(0, 1)
       })
     }
   },
@@ -57,11 +67,31 @@ export default {
       let anchorIndex = parseInt(this.touch.anchorIndex) + delta
       this._scrollTo(anchorIndex)
     },
+    refresh() {
+      this.$refs.listview.refresh()
+    },
+    scroll(pos) {
+      this.scrollY = pos.y
+    },
     _scrollTo(index) {
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
     },
-    refresh() {
-      this.$refs.listview.refresh()
+    _calculateHeight() {
+      this.listHeight = []
+      const list = this.$refs.listGroup
+      let height = 0
+      this.listHeight.push(height)
+      list.forEach((item,index) => {
+        height += item.clientHeight
+        this.listHeight.push(height)
+      })
+    }
+  },
+  watch: {
+    data() {
+      setTimeout(() => {
+        this._calculateHeight()
+      },20)
     }
   },
   components: {
