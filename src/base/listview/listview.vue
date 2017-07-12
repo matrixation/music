@@ -4,6 +4,10 @@
     <li v-for="group in data" class="list-group" ref="listGroup">
       <h2 class="list-group-title">{{group.title}}</h2>
       <uL>
+        <li v-for="item in group.item" class="list-group-item">
+          <img class="avatar" v-lazy="item.avatar">
+          <span class="name">{{item.name}}</span>
+        </li>
         <li v-for="item in group.items" class="list-group-item">
           <img class="avatar" v-lazy="item.avatar">
           <span class="name">{{item.name}}</span>
@@ -26,9 +30,7 @@
 
 <script type="text/ecmascript-6">
 import Scroll from 'base/scroll/scroll'
-import {
-  getData
-} from 'common/js/dom'
+import {getData} from 'common/js/dom'
 let ANCHOR_HEIGHT = 18
 export default {
   created() {
