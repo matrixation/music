@@ -1,0 +1,48 @@
+{
+  "grandpa": [
+    {
+      "name": "father",
+      "value": {
+        "name": "me",
+        "value": "",
+        "name": "brother",
+        "value": "",
+        "name": "sister",
+        "value": {
+          "name": "daughter",
+          "value": "",
+          "name": "son",
+          "value": ""
+        }
+      }
+    },
+    {
+      "name": "mother",
+      "value": {
+        "name": "me",
+        "value": "",
+        "name": "brother",
+        "value": "",
+        "name": "sister",
+        "value": {
+          "name": "daughter",
+          "value": "",
+          "name": "son",
+          "value": ""
+        }
+      }
+    },
+    {
+      "name": "uncle",
+      "value": {
+        "name": "ycousin",
+        "value": {
+          "name": "son",
+          "value": ""
+        },
+        "name": "ecousin",
+        "value": ""
+      }
+    }
+  ]
+}
